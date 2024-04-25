@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Hangman</title>
+	<style>
+	    body {
+		    font-family: Arial, sans-serif;
+			margin: 0;
+			padding: 0;
+			background: linear-gradient(to bottom, #ffffff, #1e57af);
+			height: 100vh;
+		}
+		.title {
+		    text-align: center;
+			font-size: 24px;
+			margin-bottom: 20px;
+		}
+		.container {
+		    width: calc(85% - 20px);
+			height: 700px;
+			margin: 20px auto;
+			padding: 20px;
+			background-color: #fff;
+			border-radius: 8px;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-between;
+			align-items: center;
+		}
+		.game {
+            width: calc(100% - 10px);
+			height: calc(97% - 20px);
+            margin-bottom: 2px;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+			text-align: center;
+        }
+
+        @media screen and (max-width: 600px) {
+            .game {
+                width: calc(50% - 20px);
+            }
+        }
+
+        @media screen and (max-width: 400px) {
+            .game {
+                width: 100%;
+            }
+        }
+		.sidebar {
+            height: 100%;
+            width: 0; 
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: linear-gradient(to bottom, #e5e5e5, #333333);
+            padding-top: 20px;
+            z-index: 1;
+            overflow-x: hidden;
+            transition: 0.3s;
+        }
+        .sidebar.open {
+            width: 300px;
+        }
+        .openbtn {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            font-size: 30px;
+            cursor: pointer;
+            background-color: transparent;
+            border: none;
+            z-index: 2;
+        }
+        .dim-overlay {
+		    position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0, 0, 0, 0.5);
+			display: none;
+	    }
+		.dim-overlay.show {
+		    display: block;
+		}	
+		.sidebar h2 {
+		    font-size: 24px;
+		    font-family: Arial, sans-serif;
+		    color: #ffffff;
+		    margin-bottom: 10px;
+		    text-align: center;
+	    }
+		.sidebar ul {
+		    padding: 0;
+		    margin: 0;
+		}
+		.sidebar ul li {
+		    list-style-type: none;
+			margin-bottom: 8px;
+		}
+		.sidebar ul li a {
+		    display: block;
+			text-align: center;
+			color: #000000;
+			text-decoration: none;
+			transition: color 0.3s ease;
+			padding: 15px;
+		}
+		.sidebar ul li a:hover {
+		    color: #646491;
+		}
+		.button {
+		    background-color: transparent;
+		    color: red;
+		    border: 2px solid red;
+		    padding: 10px 20px;
+		    font-size: 16px;
+		    cursor: pointer;
+		    transition: background-color 0.3s, color 0.3s;
+		}
+		.button:hover {
+		    background-color: red;
+		    color: darkred;
+		}
+		.hangman {
+			margin-top: 20px;
+			font-size: 36px;
+		}
+	</style>
+</head>
+<body>
+	<div class="title">
+    	<h1>Hangman</h1>
+	</div>    
+	<div class="container">
+    	<div class="game">
+        	<h2 id="wordToGuess">_ _ _ _ _ _</h2>
+			<div class="hangman" id="hangman">
+				<span id="head">O</span><br>
+				<span id="body">|</span><br>
+				<span id="leftArm">/</span>
+				<span id="rightArm">\</span><br>
+				<span id="leftLeg">/</span>
+				<span id="rightLeg">\</span>
+			</div>
+			<div id="buttons">
+				<button class="button" onclick="guessLetter('A')">A</button>
+				<button class="button" onclick="guessLetter('B')">B</button>
+				<button class="button" onclick="guessLetter('C')">C</button>
+				<button class="button" onclick="guessLetter('D')">D</button>
+				<button class="button" onclick="guessLetter('E')">E</button>
+				<button class="button" onclick="guessLetter('F')">F</button>
+				<button class="button" onclick="guessLetter('G')">G</button>
+				<button class="button" onclick="guessLetter('H')">H</button>
+				<button class="button" onclick="guessLetter('I')">I</button>
+				<button class="button" onclick="guessLetter('J')">J</button>
+				<button class="button" onclick="guessLetter('K')">K</button>
+				<button class="button" onclick="guessLetter('L')">L</button>
+				<button class="button" onclick="guessLetter('M')">M</button>
+				<button class="button" onclick="guessLetter('N')">N</button>
+				<button class="button" onclick="guessLetter('O')">O</button>
+				<button class="button" onclick="guessLetter('P')">P</button>
+				<button class="button" onclick="guessLetter('Q')">Q</button>
+				<button class="button" onclick="guessLetter('R')">R</button>
+				<button class="button" onclick="guessLetter('S')">S</button>
+				<button class="button" onclick="guessLetter('T')">T</button>
+				<button class="button" onclick="guessLetter('U')">U</button>
+				<button class="button" onclick="guessLetter('V')">V</button>
+				<button class="button" onclick="guessLetter('W')">W</button>
+				<button class="button" onclick="guessLetter('X')">X</button>
+				<button class="button" onclick="guessLetter('Y')">Y</button>
+				<button class="button" onclick="guessLetter('Z')">Z</button>
+			</div>
+    	</div>
+		<button class="openbtn" onclick="toggleSidebar()">&#9776;</button>
+		<div class="dim-overlay" id="dimOverlay" onclick="toggleSidebar()"></div>
+		<div class="sidebar" id="sidebar">
+			<h2>Menu</h2>
+			<ul>
+				<li><a href="/webtech/html/Homepage.htm">Home</a></li>
+				<li><a href="/webtech/html/TicTacToe.html">Tic Tac Toe</a></li>
+				<li><a href="/webtech/html/Pairs.html">Pairs</a></li>
+				<li><a href="/webtech/html/Snake.html">Snake</a></li>
+				<li><a href="/webtech/html/GuessNumber.html">Guess the Number</a></li>
+				<li><a href="/webtech/html/WordScramble.html">Word Scramble</a></li>
+				<li><a href="/webtech/html/Hangman.html">Hangman</a></li>
+			</ul>
+		</div>
+
+		<script>
+			function toggleSidebar() {
+				var sidebar = document.getElementById("sidebar");
+				sidebar.classList.toggle("open");
+				var dimOverlay = document.getElementById("dimOverlay");
+				dimOverlay.classList.toggle("show");
+			}
+
+			var words = ["HELLO", "WORLD", "JAVASCRIPT", "HTML", "CSS"];
+			var wordToGuess = "";
+			var guessedLetters = [];
+			var wrongGuessCount = 0;
+			var hangmanParts = ["head", "body", "leftArm", "rightArm", "leftLeg", "rightLeg"];
+
+			function newGame() {
+				wordToGuess = words[Math.floor(Math.random() * words.length)];
+				guessedLetters = [];
+				wrongGuessCount = 0;
+				resetHangman();
+				updateWordToGuessDisplay();
+			}
+
+			function updateWordToGuessDisplay() {
+				var displayText = "";
+				for (var i = 0; i < wordToGuess.length; i++) {
+					if (guessedLetters.includes(wordToGuess[i])) {
+						displayText += wordToGuess[i];
+					} else {
+						displayText += "_";
+					}
+					displayText += " ";
+				}
+				document.getElementById("wordToGuess").textContent = displayText;
+			}
+
+			function resetHangman() {
+				for (var part of hangmanParts) {
+					document.getElementById(part).style.visibility = "hidden";
+				}
+			}
+
+		 function checkWin() {
+            if (document.getElementById("wordToGuess").textContent.replace(/\s/g, '') === wordToGuess) {
+                alert("Congratulations! You won!");
+                newGame();
+            }
+        }
+
+        function guessLetter(letter) {
+            if (!guessedLetters.includes(letter)) {
+                guessedLetters.push(letter);
+                updateWordToGuessDisplay();
+                if (!wordToGuess.includes(letter)) {
+                    drawHangman();
+                }
+                if (wrongGuessCount >= hangmanParts.length) {
+                    alert("You lost! The word was: " + wordToGuess);
+                    newGame();
+                } else {
+                    checkWin();
+                }
+            }
+        }
+
+			function drawHangman() {
+				document.getElementById(hangmanParts[wrongGuessCount]).style.visibility = "visible";
+				wrongGuessCount++;
+			}
+
+			// Start a new game when the page loads
+			window.onload = newGame;
+		</script>
+
+	</div>
+</body>
+</html>
